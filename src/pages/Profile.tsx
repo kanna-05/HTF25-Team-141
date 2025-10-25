@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, User } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import {
@@ -16,6 +16,8 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Area,
+  AreaChart,
 } from "recharts";
 
 const Profile = () => {
@@ -103,147 +105,203 @@ const Profile = () => {
   if (!profile) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div>Loading...</div>
+        <div className="text-lg tracking-wide">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 pb-20">
+    <div className="min-h-screen pb-20">
+      {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-4xl mx-auto space-y-6"
+        className="gradient-header p-8 rounded-b-3xl shadow-lg mb-8"
       >
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => navigate("/")}
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Your Profile
-          </h1>
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/")}
+              className="text-white hover:bg-white/20"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-3xl font-bold text-white tracking-wide">
+              Your Profile
+            </h1>
+          </div>
         </div>
+      </motion.div>
+
+      <div className="max-w-4xl mx-auto px-4 space-y-6">
+        {/* Avatar Section */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center gap-4 glass-card rounded-3xl p-8 shadow-glass"
+        >
+          <div className="w-24 h-24 rounded-full gradient-primary flex items-center justify-center text-white shadow-glow">
+            <User className="w-12 h-12" />
+          </div>
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold tracking-wide">
+              {profile.name || "User"}
+            </h2>
+            <p className="text-muted-foreground text-sm tracking-wide">
+              {user?.email}
+            </p>
+          </div>
+        </motion.div>
 
         {/* Profile Form */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={profile.name || ""}
-                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  placeholder="Your name"
-                />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="glass-card shadow-glass border-0">
+            <CardHeader>
+              <CardTitle className="tracking-wide">Personal Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="name" className="tracking-wide">Name</Label>
+                  <Input
+                    id="name"
+                    value={profile.name || ""}
+                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                    placeholder="Your name"
+                    className="glass-card"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="age" className="tracking-wide">Age</Label>
+                  <Input
+                    id="age"
+                    type="number"
+                    value={profile.age || ""}
+                    onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) })}
+                    placeholder="25"
+                    className="glass-card"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="gender" className="tracking-wide">Gender</Label>
+                  <Input
+                    id="gender"
+                    value={profile.gender || ""}
+                    onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
+                    placeholder="Male/Female/Other"
+                    className="glass-card"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="weight" className="tracking-wide">Weight (kg)</Label>
+                  <Input
+                    id="weight"
+                    type="number"
+                    step="0.1"
+                    value={profile.weight || ""}
+                    onChange={(e) => setProfile({ ...profile, weight: parseFloat(e.target.value) })}
+                    placeholder="70"
+                    className="glass-card"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="height" className="tracking-wide">Height (cm)</Label>
+                  <Input
+                    id="height"
+                    type="number"
+                    step="0.1"
+                    value={profile.height || ""}
+                    onChange={(e) => setProfile({ ...profile, height: parseFloat(e.target.value) })}
+                    placeholder="175"
+                    className="glass-card"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="goal" className="tracking-wide">Daily Calorie Goal</Label>
+                  <Input
+                    id="goal"
+                    type="number"
+                    value={profile.daily_calorie_goal || 2000}
+                    onChange={(e) =>
+                      setProfile({ ...profile, daily_calorie_goal: parseInt(e.target.value) })
+                    }
+                    placeholder="2000"
+                    className="glass-card"
+                  />
+                </div>
               </div>
-              <div>
-                <Label htmlFor="age">Age</Label>
-                <Input
-                  id="age"
-                  type="number"
-                  value={profile.age || ""}
-                  onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) })}
-                  placeholder="25"
-                />
-              </div>
-              <div>
-                <Label htmlFor="gender">Gender</Label>
-                <Input
-                  id="gender"
-                  value={profile.gender || ""}
-                  onChange={(e) => setProfile({ ...profile, gender: e.target.value })}
-                  placeholder="Male/Female/Other"
-                />
-              </div>
-              <div>
-                <Label htmlFor="weight">Weight (kg)</Label>
-                <Input
-                  id="weight"
-                  type="number"
-                  step="0.1"
-                  value={profile.weight || ""}
-                  onChange={(e) => setProfile({ ...profile, weight: parseFloat(e.target.value) })}
-                  placeholder="70"
-                />
-              </div>
-              <div>
-                <Label htmlFor="height">Height (cm)</Label>
-                <Input
-                  id="height"
-                  type="number"
-                  step="0.1"
-                  value={profile.height || ""}
-                  onChange={(e) => setProfile({ ...profile, height: parseFloat(e.target.value) })}
-                  placeholder="175"
-                />
-              </div>
-              <div>
-                <Label htmlFor="goal">Daily Calorie Goal</Label>
-                <Input
-                  id="goal"
-                  type="number"
-                  value={profile.daily_calorie_goal || 2000}
-                  onChange={(e) =>
-                    setProfile({ ...profile, daily_calorie_goal: parseInt(e.target.value) })
-                  }
-                  placeholder="2000"
-                />
-              </div>
-            </div>
-            <Button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="w-full gradient-primary"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {isSaving ? "Saving..." : "Save Changes"}
-            </Button>
-          </CardContent>
-        </Card>
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="w-full gradient-primary text-white shadow-glow rounded-full py-6 text-base font-medium tracking-wide"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {isSaving ? "Saving..." : "Save Changes"}
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Calorie Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle>7-Day Calorie Trend</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "var(--radius)",
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="calories"
-                  stroke="hsl(var(--primary))"
-                  strokeWidth={3}
-                  dot={{ fill: "hsl(var(--primary))", r: 5 }}
-                  activeDot={{ r: 7 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-            <div className="mt-4 text-center text-sm text-muted-foreground">
-              <p>Track your daily calorie intake over the past week</p>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="glass-card shadow-glass border-0">
+            <CardHeader>
+              <CardTitle className="tracking-wide">📈 7-Day Calorie Trend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorCalories" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="hsl(var(--muted-foreground))"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <YAxis 
+                    stroke="hsl(var(--muted-foreground))"
+                    style={{ fontSize: '12px' }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card) / 0.8)",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "var(--radius)",
+                      backdropFilter: "blur(12px)",
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="calories"
+                    stroke="hsl(var(--primary))"
+                    strokeWidth={3}
+                    fill="url(#colorCalories)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="mt-4 text-center text-sm text-muted-foreground tracking-wide">
+                <p>Track your daily calorie intake over the past week</p>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   );
 };

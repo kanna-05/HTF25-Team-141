@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -50,9 +50,11 @@ const RecentMeals = ({ userId }: { userId: string }) => {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto mt-8">
-      <h3 className="text-lg font-semibold mb-4">Today's Meals</h3>
-      <div className="space-y-3">
+    <Card className="glass-card shadow-glass border-0">
+      <CardHeader>
+        <CardTitle className="tracking-wide">🍽️ Today's Meals</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
         <AnimatePresence>
           {meals.map((meal, index) => (
             <motion.div
@@ -61,45 +63,40 @@ const RecentMeals = ({ userId }: { userId: string }) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ delay: index * 0.1 }}
+              className="flex items-center gap-4 p-4 rounded-xl glass-card hover:shadow-md transition-all"
             >
-              <Card className="overflow-hidden hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex gap-4">
-                    {meal.image_url && (
-                      <img
-                        src={meal.image_url}
-                        alt={meal.dish_name}
-                        className="w-20 h-20 object-cover rounded-md"
-                      />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold truncate">{meal.dish_name}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {meal.calories} kcal
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(meal.created_at).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteMeal(meal.id)}
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+              {meal.image_url && (
+                <img
+                  src={meal.image_url}
+                  alt={meal.dish_name}
+                  className="w-16 h-16 object-cover rounded-xl shadow-sm"
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <h4 className="font-medium tracking-wide truncate">{meal.dish_name}</h4>
+                <p className="text-sm text-primary font-medium">
+                  {meal.calories} cal
+                </p>
+                <p className="text-xs text-muted-foreground tracking-wide">
+                  {new Date(meal.created_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => deleteMeal(meal.id)}
+                className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
             </motion.div>
           ))}
         </AnimatePresence>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

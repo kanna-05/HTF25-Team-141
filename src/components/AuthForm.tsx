@@ -52,12 +52,12 @@ const AuthForm = () => {
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-md mx-auto"
     >
-      <Card className="shadow-lg">
+      <Card className="glass-card shadow-glass border-0">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+          <CardTitle className="text-3xl font-bold gradient-primary bg-clip-text text-transparent tracking-wide">
             FoodVision+
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="tracking-wide">
             {isLogin ? "Welcome back!" : "Create your account"}
           </CardDescription>
         </CardHeader>
@@ -65,7 +65,7 @@ const AuthForm = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name" className="tracking-wide">Name</Label>
                 <Input
                   id="name"
                   type="text"
@@ -73,11 +73,12 @@ const AuthForm = () => {
                   onChange={(e) => setName(e.target.value)}
                   required={!isLogin}
                   placeholder="John Doe"
+                  className="glass-card"
                 />
               </div>
             )}
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="tracking-wide">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -85,10 +86,11 @@ const AuthForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
+                className="glass-card"
               />
             </div>
             <div>
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="tracking-wide">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -97,9 +99,14 @@ const AuthForm = () => {
                 required
                 placeholder="••••••••"
                 minLength={6}
+                className="glass-card"
               />
             </div>
-            <Button type="submit" className="w-full gradient-primary" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full gradient-primary shadow-glow text-white rounded-full py-6 text-base tracking-wide" 
+              disabled={isLoading}
+            >
               {isLoading ? "Loading..." : isLogin ? "Sign In" : "Sign Up"}
             </Button>
           </form>
@@ -107,7 +114,7 @@ const AuthForm = () => {
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-primary hover:underline"
+              className="text-primary hover:underline tracking-wide"
             >
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>

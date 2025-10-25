@@ -126,7 +126,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
           >
-            <Card className="relative overflow-hidden">
+            <Card className="relative overflow-hidden glass-card shadow-glass border-0">
               <img
                 src={preview}
                 alt="Preview"
@@ -136,7 +136,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
                   <div className="text-center">
                     <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-3" />
-                    <p className="text-sm font-medium">Analyzing your meal...</p>
+                    <p className="text-sm font-medium tracking-wide">Analyzing your meal...</p>
                   </div>
                 </div>
               )}
@@ -144,7 +144,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
                 <Button
                   size="icon"
                   variant="destructive"
-                  className="absolute top-2 right-2"
+                  className="absolute top-2 right-2 rounded-full"
                   onClick={() => setPreview(null)}
                 >
                   <X className="w-4 h-4" />
@@ -160,8 +160,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
           >
             <Button
               size="lg"
-              variant="default"
-              className="h-32 flex flex-col gap-2 gradient-primary shadow-md hover:shadow-lg transition-all"
+              className="h-32 flex flex-col gap-2 gradient-primary shadow-glass hover:shadow-glow text-white rounded-2xl tracking-wide"
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="w-8 h-8" />
@@ -169,8 +168,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
             </Button>
             <Button
               size="lg"
-              variant="default"
-              className="h-32 flex flex-col gap-2 gradient-accent shadow-md hover:shadow-lg transition-all"
+              className="h-32 flex flex-col gap-2 gradient-accent shadow-glass hover:shadow-glow text-white rounded-2xl tracking-wide"
               onClick={() => cameraInputRef.current?.click()}
             >
               <Camera className="w-8 h-8" />

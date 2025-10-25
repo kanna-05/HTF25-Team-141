@@ -13,6 +13,13 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      letterSpacing: {
+        wide: '0.02em',
+        wider: '0.04em',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
