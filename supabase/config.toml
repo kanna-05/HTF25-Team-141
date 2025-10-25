@@ -1,0 +1,4 @@
+project_id = "ccdqhgpfceqypyfjlfph"
+
+[functions.identify-dish]
+verify_jwt = true
