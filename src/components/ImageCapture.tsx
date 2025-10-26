@@ -85,7 +85,7 @@ const ImageCapture = ({ onImageAnalyzed }: ImageCaptureProps) => {
 
       if (insertError) throw insertError;
 
-      toast.success(`Identified: ${identifyData.dish_name}`);
+      toast.success(`✅ ${identifyData.dish_name} added! Today's list updated.`);
       onImageAnalyzed({
         ...identifyData,
         image_url: urlData.publicUrl,

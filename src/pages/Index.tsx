@@ -169,7 +169,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen pb-24 md:pt-20">
       {/* Gradient Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -182,32 +182,14 @@ const Index = () => {
             <h1 className="text-3xl font-bold text-white tracking-wide">
               FoodVision+
             </h1>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("/history")}
-                className="text-white hover:bg-white/20"
-              >
-                <History className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("/profile")}
-                className="text-white hover:bg-white/20"
-              >
-                <User className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSignOut}
-                className="text-white hover:bg-white/20"
-              >
-                <LogOut className="w-5 h-5" />
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleSignOut}
+              className="text-white hover:bg-white/20"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
           </div>
 
           {/* Welcome Message */}

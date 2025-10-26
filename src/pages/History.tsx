@@ -96,7 +96,7 @@ const History = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20 px-4">
+    <div className="min-h-screen pb-24 md:pt-20 px-4">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
