@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Save, User } from "lucide-react";
+import { ArrowLeft, Save, User, Flame, Award } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import {
@@ -156,11 +156,47 @@ const Profile = () => {
           </div>
         </motion.div>
 
-        {/* Profile Form */}
+        {/* Streak Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
+          className="grid md:grid-cols-2 gap-4"
+        >
+          <Card className="glass-card shadow-glass border-0">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-orange-500/10 rounded-full">
+                  <Flame className="w-8 h-8 text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground tracking-wide">Current Streak</p>
+                  <p className="text-3xl font-bold tracking-wide">{profile?.streak_count || 0} days</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="glass-card shadow-glass border-0">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-primary/10 rounded-full">
+                  <Award className="w-8 h-8 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground tracking-wide">Longest Streak</p>
+                  <p className="text-3xl font-bold tracking-wide">{profile?.longest_streak || 0} days</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Profile Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
         >
           <Card className="glass-card shadow-glass border-0">
             <CardHeader>
@@ -253,7 +289,7 @@ const Profile = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
         >
           <Card className="glass-card shadow-glass border-0">
             <CardHeader>

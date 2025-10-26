@@ -61,7 +61,10 @@ export type Database = {
           gender: string | null
           height: number | null
           id: string
+          last_streak_check: string | null
+          longest_streak: number | null
           name: string | null
+          streak_count: number | null
           updated_at: string | null
           user_id: string
           weight: number | null
@@ -73,7 +76,10 @@ export type Database = {
           gender?: string | null
           height?: number | null
           id?: string
+          last_streak_check?: string | null
+          longest_streak?: number | null
           name?: string | null
+          streak_count?: number | null
           updated_at?: string | null
           user_id: string
           weight?: number | null
@@ -85,7 +91,10 @@ export type Database = {
           gender?: string | null
           height?: number | null
           id?: string
+          last_streak_check?: string | null
+          longest_streak?: number | null
           name?: string | null
+          streak_count?: number | null
           updated_at?: string | null
           user_id?: string
           weight?: number | null

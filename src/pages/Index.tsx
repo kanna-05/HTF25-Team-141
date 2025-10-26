@@ -6,7 +6,7 @@ import ImageCapture from "@/components/ImageCapture";
 import RecentMeals from "@/components/RecentMeals";
 import AuthForm from "@/components/AuthForm";
 import { Button } from "@/components/ui/button";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, History, Flame } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -61,6 +61,9 @@ const Index = () => {
       const total = mealsData?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
       setTodayCalories(total);
 
+      // Check and update streak
+      await checkStreak(profileData, total);
+
       // Subscribe to realtime updates
       const channel = supabase
         .channel("meals-changes")
@@ -84,6 +87,56 @@ const Index = () => {
     } catch (error) {
       console.error("Error loading data:", error);
     }
+  };
+
+  const checkStreak = async (profileData: any, todayCalories: number) => {
+    const today = new Date().toISOString().split("T")[0];
+    const lastCheck = profileData?.last_streak_check;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+    // Only check once per day
+    if (lastCheck === today) return;
+
+    let newStreak = profileData?.streak_count || 0;
+    let newLongest = profileData?.longest_streak || 0;
+
+    // If last check was yesterday and goal was met
+    if (lastCheck === yesterdayStr) {
+      const { data: yesterdayMeals } = await supabase
+        .from("meals")
+        .select("calories")
+        .eq("user_id", user.id)
+        .gte("created_at", yesterdayStr)
+        .lt("created_at", today);
+
+      const yesterdayTotal = yesterdayMeals?.reduce((sum, meal) => sum + meal.calories, 0) || 0;
+      
+      if (yesterdayTotal >= (profileData?.daily_calorie_goal || 2000)) {
+        newStreak += 1;
+        if (newStreak > newLongest) {
+          newLongest = newStreak;
+        }
+      } else {
+        newStreak = 0;
+      }
+    } else if (lastCheck && lastCheck < yesterdayStr) {
+      // Missed a day, reset streak
+      newStreak = 0;
+    }
+
+    // Update profile with new streak
+    await supabase
+      .from("profiles")
+      .update({
+        streak_count: newStreak,
+        longest_streak: newLongest,
+        last_streak_check: today,
+      })
+      .eq("user_id", user.id);
+
+    setProfile({ ...profileData, streak_count: newStreak, longest_streak: newLongest });
   };
 
   const handleSignOut = async () => {
@@ -133,6 +186,14 @@ const Index = () => {
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={() => navigate("/history")}
+                className="text-white hover:bg-white/20"
+              >
+                <History className="w-5 h-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => navigate("/profile")}
                 className="text-white hover:bg-white/20"
               >
@@ -154,14 +215,24 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-white/90"
+            className="text-white/90 space-y-2"
           >
-            <p className="text-xl font-medium mb-1 tracking-wide">
+            <p className="text-xl font-medium tracking-wide">
               👋 Hi, {profile?.name || "there"}!
             </p>
             <p className="text-white/70 text-sm tracking-wide">
               You've consumed {todayCalories} / {profile?.daily_calorie_goal || 2000} calories today
             </p>
+            {profile?.streak_count > 0 && (
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="flex items-center gap-2 text-white"
+              >
+                <Flame className="w-5 h-5 text-orange-400" />
+                <span className="font-semibold">{profile.streak_count} Day Streak!</span>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </motion.div>
@@ -185,7 +256,7 @@ const Index = () => {
           <ImageCapture onImageAnalyzed={handleImageAnalyzed} />
         </motion.div>
 
-        {/* Recent Meals */}
+        {/* Today's Meals */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
